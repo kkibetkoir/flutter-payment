@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Hello Express!</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Hello Express!</h1>
+    <p>Showing <code>pages/index.html</code></p>
+
+    <!-- 1. M-Pesa Payment Form Elements -->
+    <div style="margin-top: 20px; max-width: 300px">
+      <h3>Pay with M-Pesa</h3>
+
+      <div style="margin-bottom: 10px">
+        <label for="fullname">Full Name:</label><br />
+        <input
+          type="text"
+          id="fullname"
+          value="Yolande Aglaé Colbert"
+          required
+        />
+      </div>
+
+      <div style="margin-bottom: 10px">
+        <label for="phone">M-Pesa Phone Number (e.g., 2547XXXXXXXX):</label
+        ><br />
+        <input type="tel" id="phone" value="254709929220" required />
+      </div>
+
+      <div style="margin-bottom: 15px">
+        <label for="amount">Amount (KES):</label><br />
+        <input type="number" id="amount" value="10" required />
+      </div>
+
+      <button type="button" id="payBtn">Pay Now</button>
+
+      <!-- Status message container -->
+      <p id="statusMsg" style="font-weight: bold; margin-top: 15px"></p>
+    </div>
+
+    <!-- 2. Frontend API Request Handling Script -->
+    <script>
+      document.getElementById('payBtn').addEventListener('click', async () => {
+        const statusMsg = document.getElementById('statusMsg');
+        const phone = document.getElementById('phone').value;
+        const fullname = document.getElementById('fullname').value;
+        const amount = document.getElementById('amount').value;
+
+        // Clear previous messages and show loading state
+        statusMsg.style.color = 'black';
+        statusMsg.textContent = 'Initiating STK Push prompt...';
+
+        try {
+          // Make the POST network request to your Express API route
+          const response = await fetch('/api/mpesa', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              phone_number: phone,
+              fullname: fullname,
+              amount: amount,
+            }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            statusMsg.style.color = 'green';
+            statusMsg.textContent =
+              'Check your phone for the M-Pesa PIN prompt!';
+            console.log('Flutterwave Response:', result.data);
+          } else {
+            statusMsg.style.color = 'red';
+            statusMsg.textContent = `Error: ${
+              result.message || 'Payment initiation failed'
+            }`;
+            console.error('Error info:', result.error);
+          }
+        } catch (err) {
+          statusMsg.style.color = 'red';
+          statusMsg.textContent = 'Network error. Could not reach server.';
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>
