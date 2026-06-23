@@ -4,14 +4,14 @@ const flw = new Flutterwave(
   process.env.FLW_SECRET_KEY
 );
 
-const card = async (payload) => {
+const applePay = async (payload) => {
   try {
-    const response = await flw.Charge.card(payload);
+    const response = await flw.Charge.applepay(payload);
     return response;
   } catch (error) {
-    console.error('Card API error:', error);
+    console.error('Apple Pay API error:', error);
     throw error;
   }
 };
 
-module.exports = card;
+module.exports = applePay;

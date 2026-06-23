@@ -4,14 +4,14 @@ const flw = new Flutterwave(
   process.env.FLW_SECRET_KEY
 );
 
-const card = async (payload) => {
+const ngBankAccount = async (payload) => {
   try {
-    const response = await flw.Charge.card(payload);
+    const response = await flw.Charge.ng(payload);
     return response;
   } catch (error) {
-    console.error('Card API error:', error);
+    console.error('NG Bank Account API error:', error);
     throw error;
   }
 };
 
-module.exports = card;
+module.exports = ngBankAccount;

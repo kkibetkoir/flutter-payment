@@ -4,14 +4,14 @@ const flw = new Flutterwave(
   process.env.FLW_SECRET_KEY
 );
 
-const card = async (payload) => {
+const ussd = async (payload) => {
   try {
-    const response = await flw.Charge.card(payload);
+    const response = await flw.Charge.ussd(payload);
     return response;
   } catch (error) {
-    console.error('Card API error:', error);
+    console.error('USSD API error:', error);
     throw error;
   }
 };
 
-module.exports = card;
+module.exports = ussd;
