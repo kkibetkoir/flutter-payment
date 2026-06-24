@@ -1,0 +1,210 @@
+<div class="docs-container">
+    <div class="docs-sidebar">
+        <div class="sidebar-sticky">
+            <h4>Payments</h4>
+            <ul class="sidebar-nav">
+                <li><a href="#mpesa">M-Pesa</a></li>
+                <li><a href="#card">Card</a></li>
+                <li><a href="#bank-transfer">Bank Transfer</a></li>
+                <li><a href="#ussd">USSD</a></li>
+                <li><a href="#apple-pay">Apple Pay</a></li>
+                <li><a href="#opay">OPay</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="docs-content">
+        <h1>Payment API</h1>
+        <p class="docs-lead">Complete payment processing endpoints for all supported payment methods.</p>
+        
+        <!-- M-Pesa Endpoint -->
+        <div id="mpesa" class="endpoint-section">
+            <h2>M-Pesa Payment</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/flow/initiate/mpesa</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Initiate an M-Pesa payment. The customer will receive a prompt on their phone to complete the payment.</p>
+                <p><strong>Supported Currencies:</strong> KES, TZS, UGX, RWF</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/flow/initiate/mpesa" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="100" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency *</label>
+                        <select class="test-input" data-field="currency">
+                            <option value="KES">KES</option>
+                            <option value="TZS">TZS</option>
+                            <option value="UGX">UGX</option>
+                            <option value="RWF">RWF</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" class="test-input" data-field="phone" value="254712345678">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="test-input" data-field="email" value="customer@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" class="test-input" data-field="fullname" value="John Doe">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/flow/initiate/mpesa', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        amount: '100',
+        currency: 'KES',
+        phone: '254712345678',
+        email: 'customer@example.com',
+        fullname: 'John Doe'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//   "success": true,
+//   "checkoutId": "MPESA-1234567890",
+//   "tx_ref": "FLW-1234567890-abc123",
+//   "message": "M-Pesa payment initiated successfully"
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card Payment Endpoint -->
+        <div id="card" class="endpoint-section">
+            <h2>Card Payment</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/flow/initiate/card</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Process card payments with 3D Secure authentication. Supports Visa, Mastercard, and American Express.</p>
+                <p><strong>Supported Currencies:</strong> USD, NGN, GHS, ZAR, GBP, EUR</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/flow/initiate/card" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="2.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency *</label>
+                        <select class="test-input" data-field="currency">
+                            <option value="USD">USD</option>
+                            <option value="NGN">NGN</option>
+                            <option value="GHS">GHS</option>
+                            <option value="ZAR">ZAR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number *</label>
+                        <input type="text" class="test-input" data-field="card_number" placeholder="4242 4242 4242 4242" value="4242424242424242">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expiry Month *</label>
+                            <input type="text" class="test-input" data-field="expiry_month" placeholder="MM" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label>Expiry Year *</label>
+                            <input type="text" class="test-input" data-field="expiry_year" placeholder="YY" value="25">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV *</label>
+                            <input type="text" class="test-input" data-field="cvv" placeholder="123" value="123">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="test-input" data-field="email" value="customer@example.com">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bank Transfer Endpoint -->
+        <div id="bank-transfer" class="endpoint-section">
+            <h2>Bank Transfer</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/flow/initiate/bank-transfer</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Generate virtual account numbers for bank transfer collections. Customers receive account details to complete payment.</p>
+                <p><strong>Supported Currencies:</strong> NGN, GHS</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/flow/initiate/bank-transfer" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="1000" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency *</label>
+                        <select class="test-input" data-field="currency">
+                            <option value="NGN">NGN</option>
+                            <option value="GHS">GHS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="test-input" data-field="email" value="customer@example.com">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

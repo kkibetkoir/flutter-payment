@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const path = require('path');
 const { resolve } = require('path');
+const axios = require('axios');
 require('dotenv').config();
 
 // Import all routers
@@ -22,7 +24,7 @@ const enairaRouter = require('./routes/enairaRouter');
 const applePayRouter = require('./routes/applePayRouter');
 const googlePayRouter = require('./routes/googlePayRouter');
 
-// ============== NEW: Import transaction routers ==============
+// Import transaction routers
 const fetchTransactionsRouter = require('./routes/transactions/fetchTransactionsRouter');
 const getTransactionFeeRouter = require('./routes/transactions/getTransactionFeeRouter');
 const resendWebhookRouter = require('./routes/transactions/resendWebhookRouter');
@@ -31,66 +33,105 @@ const verifyTransactionByRefRouter = require('./routes/transactions/verifyTransa
 const createRefundRouter = require('./routes/transactions/createRefundRouter');
 const viewTimelineRouter = require('./routes/transactions/viewTimelineRouter');
 
+// ============== NEW: Import Virtual Card routers ==============
+const createVirtualCardRouter = require('./routes/virtualCards/createVirtualCardRouter');
+const fetchAllVirtualCardsRouter = require('./routes/virtualCards/fetchAllVirtualCardsRouter');
+const fetchVirtualCardRouter = require('./routes/virtualCards/fetchVirtualCardRouter');
+const fundVirtualCardRouter = require('./routes/virtualCards/fundVirtualCardRouter');
+const withdrawVirtualCardRouter = require('./routes/virtualCards/withdrawVirtualCardRouter');
+const terminateVirtualCardRouter = require('./routes/virtualCards/terminateVirtualCardRouter');
+const blockVirtualCardRouter = require('./routes/virtualCards/blockVirtualCardRouter');
+const unblockVirtualCardRouter = require('./routes/virtualCards/unblockVirtualCardRouter');
+const getVirtualCardTransactionsRouter = require('./routes/virtualCards/getVirtualCardTransactionsRouter');
+
 const app = express();
 const PORT = process.env.PORT || 3010;
 const server = http.createServer(app);
 
 // Middleware
-// ===== CORS CONFIGURATION =====
-// Option 1: Allow all origins (for development)
-//app.use(cors());
-
-// CORS - Allow all origins (quick fix for testing)
+// CORS - Allow all origins
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  //allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 
-// Option 2: Allow specific origins (for production)
-/*const allowedOrigins = [
-    'https://rise.app',
-    'https://www.rise.app',
-    'http://localhost:3000',
-    'http://localhost:3001',
-    'http://localhost:5500',
-    'https://your-frontend-domain.com'
-];*/
 
-/*app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'X-Requested-With',
-      'Accept',
-      'Origin',
-    ],
-  })
-);*/
-
-//using middleware
-//const corsMiddleware = require('./middleware/cors');
-//app.use(corsMiddleware);
-
-app.use(express.static('static'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Middleware to make base URL available in all routes
+app.use((req, res, next) => {
+  const protocol = req.protocol;
+  const host = req.get('host');
+  const baseUrl = `${protocol}://${host}`;
+  
+  // Make available in res.locals for EJS templates
+  res.locals.apiBaseUrl = baseUrl;
+  
+  // Also make available in req for routes
+  req.apiBaseUrl = baseUrl;
+  
+  next();
+});
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
+  res.render('pages/index', {
+      title: 'API Documentation',
+      apiBaseUrl: req.apiBaseUrl, // Dynamic base URL
+      currentPage: 'home'
+  });
+});
+
+app.get('/endpoints/payments', (req, res) => {
+  res.render('pages/endpoints/payments', {
+      title: 'Payment API Documentation',
+      apiBaseUrl: req.apiBaseUrl, // Dynamic base URL
+      currentPage: 'payments'
+  });
+});
+
+app.get('/endpoints/transactions', (req, res) => {
+  res.render('pages/endpoints/transactions', {
+      title: 'Transaction API Documentation',
+      apiBaseUrl: req.apiBaseUrl, // Dynamic base URL
+      currentPage: 'transactions'
+  });
+});
+
+app.get('/endpoints/virtual-cards', (req, res) => {
+  res.render('pages/endpoints/virtual-cards', {
+      title: 'Virtual Card API Documentation',
+      apiBaseUrl: req.apiBaseUrl, // Dynamic base URL
+      currentPage: 'virtual-cards'
+  });
+});
+
+// API Proxy endpoints for testing
+app.post('/api/proxy', async (req, res) => {
+  try {
+      const { url, method, headers, body } = req.body;
+      const response = await axios({
+          method: method || 'POST',
+          url: url,
+          headers: headers || {},
+          data: body || {},
+          timeout: 30000
+      });
+      res.json(response.data);
+  } catch (error) {
+      res.status(error.response?.status || 500).json({
+          error: error.message,
+          response: error.response?.data
+      });
+  }
 });
 
 // API Routes
@@ -111,7 +152,7 @@ app.use('/api/enaira', enairaRouter);
 app.use('/api/apple-pay', applePayRouter);
 app.use('/api/google-pay', googlePayRouter);
 
-// ============== NEW: Transaction API Routes ==============
+// ============== Transaction API Routes ==============
 app.use('/api/transactions/fetch', fetchTransactionsRouter);
 app.use('/api/transactions/fee', getTransactionFeeRouter);
 app.use('/api/transactions/resend-webhook', resendWebhookRouter);
@@ -119,6 +160,17 @@ app.use('/api/transactions/verify', verifyTransactionRouter);
 app.use('/api/transactions/verify-by-ref', verifyTransactionByRefRouter);
 app.use('/api/transactions/refund', createRefundRouter);
 app.use('/api/transactions/timeline', viewTimelineRouter);
+
+// ============== NEW: Virtual Card API Routes ==============
+app.use('/api/virtual-cards/create', createVirtualCardRouter);
+app.use('/api/virtual-cards/all', fetchAllVirtualCardsRouter);
+app.use('/api/virtual-cards/fetch', fetchVirtualCardRouter);
+app.use('/api/virtual-cards/fund', fundVirtualCardRouter);
+app.use('/api/virtual-cards/withdraw', withdrawVirtualCardRouter);
+app.use('/api/virtual-cards/terminate', terminateVirtualCardRouter);
+app.use('/api/virtual-cards/block', blockVirtualCardRouter);
+app.use('/api/virtual-cards/unblock', unblockVirtualCardRouter);
+app.use('/api/virtual-cards/transactions', getVirtualCardTransactionsRouter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -153,6 +205,18 @@ app.get('/health', (req, res) => {
       '/api/transactions/refund',
       '/api/transactions/timeline',
     ],
+
+    virtualCards: [
+      '/api/virtual-cards/create',
+      '/api/virtual-cards/all',
+      '/api/virtual-cards/fetch',
+      '/api/virtual-cards/fund',
+      '/api/virtual-cards/withdraw',
+      '/api/virtual-cards/terminate',
+      '/api/virtual-cards/block',
+      '/api/virtual-cards/unblock',
+      '/api/virtual-cards/transactions'
+    ]
   });
 });
 
@@ -172,6 +236,7 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`💳 Payment endpoints available at /api/*`);
   console.log(`📊 Transaction endpoints available at /api/transactions/*`);
+  console.log(`💳 Virtual Card endpoints available at /api/virtual-cards/*`);
 });
 
 // Handle graceful shutdown

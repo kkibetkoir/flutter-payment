@@ -1,0 +1,576 @@
+<div class="docs-container">
+    <div class="docs-sidebar">
+        <div class="sidebar-sticky">
+            <h4>Virtual Cards</h4>
+            <ul class="sidebar-nav">
+                <li><a href="#create">Create Virtual Card</a></li>
+                <li><a href="#fetch-all">Fetch All Cards</a></li>
+                <li><a href="#fetch">Fetch Single Card</a></li>
+                <li><a href="#fund">Fund Card</a></li>
+                <li><a href="#withdraw">Withdraw Funds</a></li>
+                <li><a href="#transactions">Card Transactions</a></li>
+                <li><a href="#block">Block Card</a></li>
+                <li><a href="#unblock">Unblock Card</a></li>
+                <li><a href="#terminate">Terminate Card</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="docs-content">
+        <h1>Virtual Cards API</h1>
+        <p class="docs-lead">Complete virtual card management for creating, funding, and managing virtual cards.</p>
+        
+        <!-- Create Virtual Card -->
+        <div id="create" class="endpoint-section">
+            <h2>Create Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/create</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Create a new virtual card with the specified currency and amount.</p>
+                <p><strong>Required Fields:</strong> currency, amount, billing_name, billing_address, billing_city, billing_state, billing_postal_code, billing_country, first_name, last_name, date_of_birth, email, phone</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/create" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Currency *</label>
+                        <select class="test-input" data-field="currency">
+                            <option value="USD">USD</option>
+                            <option value="NGN">NGN</option>
+                            <option value="KES">KES</option>
+                            <option value="GHS">GHS</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="5" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Debit Currency</label>
+                        <select class="test-input" data-field="debit_currency">
+                            <option value="NGN">NGN</option>
+                            <option value="USD">USD</option>
+                            <option value="KES">KES</option>
+                            <option value="GHS">GHS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Name *</label>
+                        <input type="text" class="test-input" data-field="billing_name" value="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Address *</label>
+                        <input type="text" class="test-input" data-field="billing_address" value="333 Fremont Street">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing City *</label>
+                        <input type="text" class="test-input" data-field="billing_city" value="San Francisco">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing State *</label>
+                        <input type="text" class="test-input" data-field="billing_state" value="CA">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Postal Code *</label>
+                        <input type="text" class="test-input" data-field="billing_postal_code" value="94105">
+                    </div>
+                    <div class="form-group">
+                        <label>Billing Country *</label>
+                        <select class="test-input" data-field="billing_country">
+                            <option value="US">US</option>
+                            <option value="NG">NG</option>
+                            <option value="KE">KE</option>
+                            <option value="GH">GH</option>
+                            <option value="ZA">ZA</option>
+                            <option value="GB">GB</option>
+                            <option value="FR">FR</option>
+                            <option value="DE">DE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        <input type="text" class="test-input" data-field="first_name" value="John">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name *</label>
+                        <input type="text" class="test-input" data-field="last_name" value="Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth *</label>
+                        <input type="date" class="test-input" data-field="date_of_birth" value="1996-12-30">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" class="test-input" data-field="email" value="user@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" class="test-input" data-field="phone" value="07030000000">
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <select class="test-input" data-field="title">
+                            <option value="MR">MR</option>
+                            <option value="MS">MS</option>
+                            <option value="MRS">MRS</option>
+                            <option value="DR">DR</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select class="test-input" data-field="gender">
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/virtual-cards/create', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        currency: 'USD',
+        amount: 5,
+        debit_currency: 'NGN',
+        billing_name: 'John Doe',
+        billing_address: '333 Fremont Street',
+        billing_city: 'San Francisco',
+        billing_state: 'CA',
+        billing_postal_code: '94105',
+        billing_country: 'US',
+        first_name: 'John',
+        last_name: 'Doe',
+        date_of_birth: '1996-12-30',
+        email: 'user@example.com',
+        phone: '07030000000',
+        title: 'MR',
+        gender: 'M'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//   "status": "success",
+//   "message": "Card created successfully",
+//   "data": {
+//     "id": "199a344f-1dbe-4b00-ba4d-beb014345fae",
+//     "card_pan": "5319938155020288",
+//     "masked_pan": "531993*******0288",
+//     "cvv": "905",
+//     "expiration": "2025-09",
+//     "is_active": true
+//   }
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fetch All Cards -->
+        <div id="fetch-all" class="endpoint-section">
+            <h2>Fetch All Virtual Cards</h2>
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/all</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Retrieve all virtual cards associated with your account.</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/all" data-method="GET">
+                <h3>Try it Out</h3>
+                <div class="tester-form" style="grid-template-columns: 1fr;">
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Fetch All Cards</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/virtual-cards/all');
+const data = await response.json();
+console.log(data);
+// {
+//   "status": "success",
+//   "message": "Cards fetched successfully",
+//   "data": [
+//     {
+//       "id": "df3f2ba4-f137-4ce0-a6e3-3264c5831f17",
+//       "card_pan": "5366136122489510",
+//       "masked_pan": "536613*******9510",
+//       "currency": "NGN",
+//       "amount": "8999.00",
+//       "is_active": true
+//     }
+//   ]
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fetch Single Card -->
+        <div id="fetch" class="endpoint-section">
+            <h2>Fetch Single Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/fetch</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/fetch/{cardId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Retrieve detailed information about a specific virtual card.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/fetch" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="df3f2ba4-f137-4ce0-a6e3-3264c5831f17">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fund Card -->
+        <div id="fund" class="endpoint-section">
+            <h2>Fund Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/fund</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Add funds to an existing virtual card.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID, amount (number), debit_currency (string)</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/fund" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="c6d7f40b-f772-47b7-8136-81256d2f87a2">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="500" step="0.01">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Debit Currency</label>
+                        <select class="test-input" data-field="debit_currency">
+                            <option value="NGN">NGN</option>
+                            <option value="USD">USD</option>
+                            <option value="KES">KES</option>
+                            <option value="GHS">GHS</option>
+                        </select>
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/virtual-cards/fund', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: 'c6d7f40b-f772-47b7-8136-81256d2f87a2',
+        amount: 500,
+        debit_currency: 'NGN'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//   "status": "success",
+//   "message": "Card funded successfully",
+//   "data": null
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Withdraw Funds -->
+        <div id="withdraw" class="endpoint-section">
+            <h2>Withdraw from Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/withdraw</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Withdraw existing funds from a virtual card.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID, amount (number)</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/withdraw" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="92b5d258-e85f-4ca6-835d-e0c6fa20d958">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="10" step="0.01">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card Transactions -->
+        <div id="transactions" class="endpoint-section">
+            <h2>Get Card Transactions</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/transactions</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/transactions/{cardId}?from=2020-01-01&to=2024-12-31</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Retrieve transaction history for a specific virtual card with date range filtering.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID, from (date), to (date), index (number), size (number)</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/transactions" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="b1405144-3427-4baf-80ea-5c6075a01a74">
+                    </div>
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" class="test-input" data-field="from" value="2020-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" class="test-input" data-field="to" value="2024-12-31">
+                    </div>
+                    <div class="form-group">
+                        <label>Index</label>
+                        <input type="number" class="test-input" data-field="index" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Size</label>
+                        <input type="number" class="test-input" data-field="size" value="10" min="1" max="100">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Block Card -->
+        <div id="block" class="endpoint-section">
+            <h2>Block Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/block</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method put">PUT</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/block/{cardId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Block a virtual card to prevent further transactions.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/block" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="92b5d258-e85f-4ca6-835d-e0c6fa20d958">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Block Card</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Unblock Card -->
+        <div id="unblock" class="endpoint-section">
+            <h2>Unblock Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/unblock</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method put">PUT</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/unblock/{cardId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Unblock a previously blocked virtual card.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/unblock" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="92b5d258-e85f-4ca6-835d-e0c6fa20d958">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Unblock Card</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terminate Card -->
+        <div id="terminate" class="endpoint-section">
+            <h2>Terminate Virtual Card</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/terminate</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method delete">DELETE</span>
+                <span class="path"><%= apiBaseUrl %>/api/virtual-cards/terminate/{cardId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Permanently terminate a virtual card. This action cannot be undone.</p>
+                <p><strong>Parameters:</strong> id (string) - Card ID</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/virtual-cards/terminate" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Card ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter card ID" value="c6d7f40b-f772-47b7-8136-81256d2f87a2">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Terminate Card</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// POST request
+const response = await fetch('<%= apiBaseUrl %>/api/virtual-cards/terminate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: 'c6d7f40b-f772-47b7-8136-81256d2f87a2'
+    })
+});
+
+// DELETE request
+const response2 = await fetch('<%= apiBaseUrl %>/api/virtual-cards/terminate/c6d7f40b-f772-47b7-8136-81256d2f87a2', {
+    method: 'DELETE'
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//   "status": "success",
+//   "message": "Card terminated successfully",
+//   "data": null
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

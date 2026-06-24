@@ -1,0 +1,484 @@
+<div class="docs-container">
+    <div class="docs-sidebar">
+        <div class="sidebar-sticky">
+            <h4>Transactions</h4>
+            <ul class="sidebar-nav">
+                <li><a href="#fetch">Fetch Transactions</a></li>
+                <li><a href="#fee">Get Transaction Fee</a></li>
+                <li><a href="#verify">Verify Transaction</a></li>
+                <li><a href="#verify-ref">Verify by Reference</a></li>
+                <li><a href="#refund">Create Refund</a></li>
+                <li><a href="#timeline">View Timeline</a></li>
+                <li><a href="#webhook">Resend Webhook</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="docs-content">
+        <h1>Transaction API</h1>
+        <p class="docs-lead">Complete transaction management endpoints for verifying, refunding, and tracking payments.</p>
+        
+        <!-- Fetch Transactions -->
+        <div id="fetch" class="endpoint-section">
+            <h2>Fetch Transactions</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/fetch</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/fetch?from=2020-01-01&to=2020-05-05</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Fetch all transactions on your account with optional date range filtering.</p>
+                <p><strong>Parameters:</strong> from (date), to (date), page (number), limit (number)</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/fetch" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" class="test-input" data-field="from" value="2024-01-01">
+                    </div>
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" class="test-input" data-field="to" value="2024-12-31">
+                    </div>
+                    <div class="form-group">
+                        <label>Page</label>
+                        <input type="number" class="test-input" data-field="page" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Limit</label>
+                        <input type="number" class="test-input" data-field="limit" value="10" min="1" max="100">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// POST request
+const response = await fetch('<%= apiBaseUrl %>/api/transactions/fetch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        from: '2024-01-01',
+        to: '2024-12-31',
+        page: 1,
+        limit: 10
+    })
+});
+
+const data = await response.json();
+console.log(data);
+
+// GET request
+const response2 = await fetch(
+    '<%= apiBaseUrl %>/api/transactions/fetch?from=2024-01-01&to=2024-12-31&page=1&limit=10'
+);
+const data2 = await response2.json();
+console.log(data2);</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Get Transaction Fee -->
+        <div id="fee" class="endpoint-section">
+            <h2>Get Transaction Fee</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/fee</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/fee?amount=1000&currency=NGN</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Calculate the transaction fee for a given amount and currency.</p>
+                <p><strong>Parameters:</strong> amount (number), currency (string)</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/fee" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" class="test-input" data-field="amount" value="1000" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Currency *</label>
+                        <select class="test-input" data-field="currency">
+                            <option value="NGN">NGN</option>
+                            <option value="KES">KES</option>
+                            <option value="GHS">GHS</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="EUR">EUR</option>
+                            <option value="ZAR">ZAR</option>
+                        </select>
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/transactions/fee', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        amount: 1000,
+        currency: 'NGN'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//   "status": "success",
+//   "message": "Charged fee",
+//   "data": {
+//       "charge_amount": 10000,
+//       "fee": 140,
+//       "merchant_fee": 0,
+//       "flutterwave_fee": 140,
+//       "stamp_duty_fee": 50,
+//       "currency": "NGN"
+//   }
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Verify Transaction -->
+        <div id="verify" class="endpoint-section">
+            <h2>Verify Transaction</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/verify</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/verify/{transactionId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Verify the status and details of a transaction using its transaction ID.</p>
+                <p><strong>Parameters:</strong> id (string) - The transaction unique identifier</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/verify" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Transaction ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter transaction ID" value="288200108">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// POST request
+const response = await fetch('<%= apiBaseUrl %>/api/transactions/verify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: '288200108'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+
+// GET request
+const response2 = await fetch('<%= apiBaseUrl %>/api/transactions/verify/288200108');
+const data2 = await response2.json();
+console.log(data2);</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Verify by Reference -->
+        <div id="verify-ref" class="endpoint-section">
+            <h2>Verify Transaction by Reference</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/verify-by-ref</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/verify-by-ref/{tx_ref}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Verify transaction status using the transaction reference (tx_ref).</p>
+                <p><strong>Parameters:</strong> tx_ref (string) - The transaction reference</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/verify-by-ref" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Transaction Reference *</label>
+                        <input type="text" class="test-input" data-field="tx_ref" placeholder="Enter tx_ref" value="txref-DI0NzMx13">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// POST request
+const response = await fetch('<%= apiBaseUrl %>/api/transactions/verify-by-ref', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        tx_ref: 'txref-DI0NzMx13'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+
+// GET request
+const response2 = await fetch('<%= apiBaseUrl %>/api/transactions/verify-by-ref/txref-DI0NzMx13');
+const data2 = await response2.json();
+console.log(data2);</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Create Refund -->
+        <div id="refund" class="endpoint-section">
+            <h2>Create Refund</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/refund</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Initiate a refund for a transaction. If amount is not specified, full amount will be refunded.</p>
+                <p><strong>Parameters:</strong> id (string) - Transaction ID, amount (number) - Optional</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/refund" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group">
+                        <label>Transaction ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter transaction ID" value="5708">
+                    </div>
+                    <div class="form-group">
+                        <label>Amount (Optional)</label>
+                        <input type="number" class="test-input" data-field="amount" placeholder="Leave empty for full refund" step="0.01">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// Full refund
+const response = await fetch('<%= apiBaseUrl %>/api/transactions/refund', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: '5708'
+    })
+});
+
+// Partial refund
+const response2 = await fetch('<%= apiBaseUrl %>/api/transactions/refund', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: '5708',
+        amount: 10
+    })
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Timeline -->
+        <div id="timeline" class="endpoint-section">
+            <h2>View Transaction Timeline</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/timeline</span>
+            </div>
+            <div class="endpoint-header" style="margin-top: 8px;">
+                <span class="method get">GET</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/timeline/{transactionId}</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>View the complete timeline of events for a transaction.</p>
+                <p><strong>Parameters:</strong> id (string) - Transaction ID</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/timeline" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Transaction ID *</label>
+                        <input type="text" class="test-input" data-field="id" placeholder="Enter transaction ID" value="1296063">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">// POST request
+const response = await fetch('<%= apiBaseUrl %>/api/transactions/timeline', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        id: '1296063'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+
+// GET request
+const response2 = await fetch('<%= apiBaseUrl %>/api/transactions/timeline/1296063');
+const data2 = await response2.json();
+console.log(data2);</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resend Webhook -->
+        <div id="webhook" class="endpoint-section">
+            <h2>Resend Webhook</h2>
+            <div class="endpoint-header">
+                <span class="method post">POST</span>
+                <span class="path"><%= apiBaseUrl %>/api/transactions/resend-webhook</span>
+            </div>
+            
+            <div class="endpoint-description">
+                <p>Resend a failed transaction webhook to your server.</p>
+                <p><strong>Parameters:</strong> tx_ref (string) - Transaction reference</p>
+            </div>
+            
+            <div class="endpoint-tester" data-endpoint="/api/transactions/resend-webhook" data-method="POST">
+                <h3>Try it Out</h3>
+                <div class="tester-form">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>Transaction Reference *</label>
+                        <input type="text" class="test-input" data-field="tx_ref" placeholder="Enter tx_ref" value="rave-123wsvgfwefcwsfc456">
+                    </div>
+                    <button class="btn-test" onclick="testEndpoint(this)">🚀 Test Endpoint</button>
+                </div>
+                <div class="tester-response">
+                    <div class="response-header">
+                        <span>Response</span>
+                        <button class="response-clear" onclick="clearResponse(this)">Clear</button>
+                    </div>
+                    <pre class="response-body"><code></code></pre>
+                </div>
+            </div>
+            
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-language">JavaScript</span>
+                    <button class="copy-btn">📋 Copy</button>
+                </div>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const response = await fetch('<%= apiBaseUrl %>/api/transactions/resend-webhook', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        tx_ref: 'rave-123wsvgfwefcwsfc456'
+    })
+});
+
+const data = await response.json();
+console.log(data);
+// {
+//     "status": "success",
+//     "message": "hook sent successfully",
+//     "data": "hook sent"
+// }</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

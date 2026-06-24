@@ -1,0 +1,129 @@
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-content">
+            <span class="hero-badge">✨ Complete API Reference</span>
+            <h1>Rise Payment API</h1>
+            <p class="hero-subtitle">
+                Modern payment processing API with support for cards, mobile money, 
+                bank transfers, and virtual cards. Designed for developers building 
+                payment experiences in Africa and beyond.
+            </p>
+            <div class="hero-actions">
+                <a href="/endpoints/payments" class="btn-primary">
+                    Get Started
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 10h10M10 5l5 5-5 5"/>
+                    </svg>
+                </a>
+                <a href="#" class="btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.269 2.75 1.025.8-.223 1.65-.334 2.5-.334.85 0 1.7.111 2.5.334 1.91-1.294 2.75-1.025 2.75-1.025.545 1.376.201 2.393.099 2.646.64.698 1.03 1.591 1.03 2.682 0 3.841-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.163 20 14.418 20 10c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">API Endpoints</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Payment Methods</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">8</span>
+                <span class="stat-label">Currencies</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">10+</span>
+                <span class="stat-label">Countries</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="quick-start">
+    <div class="container">
+        <h2>Quick Start</h2>
+        <p class="section-subtitle">Start accepting payments in minutes</p>
+        
+        <div class="code-example">
+            <div class="code-header">
+                <span class="code-language">JavaScript</span>
+                <button class="copy-btn">📋 Copy</button>
+            </div>
+            <div class="code-block">
+                <pre><code class="language-javascript">const API_BASE = '<%= apiBaseUrl %>';
+
+// Initialize payment
+const response = await fetch(`${API_BASE}/api/flow/initiate/mpesa`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        amount: '100',
+        currency: 'KES',
+        phone: '254712345678',
+        email: 'customer@example.com',
+        fullname: 'John Doe'
+    })
+});
+
+const data = await response.json();
+console.log('Payment initiated:', data.checkoutId);
+
+// Check payment status
+const status = await fetch(`${API_BASE}/api/flow/status`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ checkoutId: data.checkoutId })
+});</code></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-grid">
+    <div class="container">
+        <h2>Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>Card Payments</h3>
+                <p>Accept credit and debit card payments securely with 3D Secure support.</p>
+                <a href="/endpoints/payments#card" class="feature-link">Learn More →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Mobile Money</h3>
+                <p>Support for M-Pesa, MTN, Airtel, and other mobile money providers.</p>
+                <a href="/endpoints/payments#mobile-money" class="feature-link">Learn More →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏦</div>
+                <h3>Bank Transfers</h3>
+                <p>Virtual account generation for seamless bank transfer collections.</p>
+                <a href="/endpoints/payments#bank-transfer" class="feature-link">Learn More →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Transaction Management</h3>
+                <p>Track, verify, and manage all your transactions in one place.</p>
+                <a href="/endpoints/transactions" class="feature-link">Learn More →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3>Virtual Cards</h3>
+                <p>Create and manage virtual cards for your customers.</p>
+                <a href="/endpoints/virtual-cards" class="feature-link">Learn More →</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔌</div>
+                <h3>Webhooks & Events</h3>
+                <p>Real-time payment notifications and event webhooks.</p>
+                <a href="#" class="feature-link">Learn More →</a>
+            </div>
+        </div>
+    </div>
+</section>

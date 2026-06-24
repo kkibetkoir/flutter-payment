@@ -1,0 +1,39 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-logo">
+            <span class="logo-icon">🚀</span>
+            <span class="logo-text">Rise API</span>
+            <span class="logo-badge">v1.0</span>
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="/" class="<%= currentPage === 'home' ? 'active' : '' %>">Home</a></li>
+            <li><a href="/endpoints/payments" class="<%= currentPage === 'payments' ? 'active' : '' %>">Payments</a></li>
+            <li><a href="/endpoints/transactions" class="<%= currentPage === 'transactions' ? 'active' : '' %>">Transactions</a></li>
+            <li><a href="/endpoints/virtual-cards" class="<%= currentPage === 'virtual-cards' ? 'active' : '' %>">Virtual Cards</a></li>
+        </ul>
+        
+        <div class="nav-actions">
+            <span class="api-status">
+                <span class="status-dot online"></span>
+                <span class="status-text">API Online</span>
+            </span>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18M3 6h18M3 18h18"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/">Home</a>
+        <a href="/endpoints/payments">Payments</a>
+        <a href="/endpoints/transactions">Transactions</a>
+        <a href="/endpoints/virtual-cards">Virtual Cards</a>
+        <div class="mobile-api-status">
+            <span class="status-dot online"></span>
+            <span>API Online</span>
+        </div>
+    </div>
+</nav>

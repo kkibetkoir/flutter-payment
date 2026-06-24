@@ -1,0 +1,37 @@
+<script src="/js/api-tester.js"></script>
+<script>
+    // Mobile menu toggle
+    document.getElementById('menuToggle')?.addEventListener('click', function() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('active');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('mobileMenu')?.classList.remove('active');
+        });
+    });
+
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const code = this.closest('.code-block')?.querySelector('code')?.textContent;
+            if (code) {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    const originalText = this.textContent;
+                    this.textContent = '✅ Copied!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            }
+        });
+    });
+
+    console.log('📚 API Documentation loaded');
+    console.log('🔗 API Base URL:', '<%= apiBaseUrl %>');
+</script>
