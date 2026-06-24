@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { resolve } = require('path');
+const cors = require('cors');
 require('dotenv').config();
 
 // Import all routers
@@ -35,6 +36,48 @@ const PORT = process.env.PORT || 3010;
 const server = http.createServer(app);
 
 // Middleware
+// ===== CORS CONFIGURATION =====
+// Option 1: Allow all origins (for development)
+app.use(cors());
+
+// Option 2: Allow specific origins (for production)
+/*const allowedOrigins = [
+    'https://rise.app',
+    'https://www.rise.app',
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:5500',
+    'https://your-frontend-domain.com'
+];*/
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'X-Requested-With',
+      'Accept',
+      'Origin',
+    ],
+  })
+);
+
+//using middleware
+//const corsMiddleware = require('./middleware/cors');
+//app.use(corsMiddleware);
+
 app.use(express.static('static'));
 app.use(express.json());
 
