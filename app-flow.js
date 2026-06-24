@@ -21,7 +21,14 @@ checkStatusRouter.setPaymentWebSocket(paymentWebSocket);
 webhookRouter.setPaymentWebSocket(paymentWebSocket);
 
 // Middleware
-app.use(cors());
+
+// CORS - Allow all origins (quick fix for testing)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  //allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
+
 app.use(express.json());
 
 // Payment Flow Routes (Front-End Only)

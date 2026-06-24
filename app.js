@@ -1,7 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const http = require('http');
 const { resolve } = require('path');
-const cors = require('cors');
 require('dotenv').config();
 
 // Import all routers
@@ -38,7 +38,14 @@ const server = http.createServer(app);
 // Middleware
 // ===== CORS CONFIGURATION =====
 // Option 1: Allow all origins (for development)
-app.use(cors());
+//app.use(cors());
+
+// CORS - Allow all origins (quick fix for testing)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  //allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
 
 // Option 2: Allow specific origins (for production)
 /*const allowedOrigins = [
@@ -50,7 +57,7 @@ app.use(cors());
     'https://your-frontend-domain.com'
 ];*/
 
-app.use(
+/*app.use(
   cors({
     origin: function (origin, callback) {
       // Allow requests with no origin (like mobile apps or curl requests)
@@ -72,7 +79,7 @@ app.use(
       'Origin',
     ],
   })
-);
+);*/
 
 //using middleware
 //const corsMiddleware = require('./middleware/cors');

@@ -4,10 +4,10 @@
   "scripts": {
     "start": "node app.js",
     "start:flow": "node app-flow.js",
-    "dev": "nodemon app.js",
-    "dev:flow": "nodemon app-flow.js",
-    "start:all": "concurrently \"npm run start\" \"npm run start:flow\"",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:flow\""
+    "dev": "npx nodemon app.js",
+    "dev:flow": "npx nodemon app-flow.js",
+    "start:all": "npx concurrently \"npm run start\" \"npm run start:flow\"",
+    "dev:all": "npx concurrently \"npm run dev\" \"npm run dev:flow\""
   },
   "dependencies": {
     "cors": "^2.8.6",
