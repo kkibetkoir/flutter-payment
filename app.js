@@ -1,4 +1,5 @@
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const cors = require('cors');
 const http = require('http');
 const path = require('path');
@@ -65,6 +66,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Add this line to use main.ejs as layout
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');  // This tells it to use main.ejs
+
 
 // Middleware to make base URL available in all routes
 app.use((req, res, next) => {
