@@ -49,13 +49,26 @@ const app = express();
 const PORT = process.env.PORT || 3010;
 const server = http.createServer(app);
 
+// Import Payment WebSocket
+const PaymentWebSocket = require('./websocket/paymentWebSocket');
+const paymentWebSocket = new PaymentWebSocket(server);
+
+// Import Payment Flow Routes
+const initPaymentRouter = require('./routes/paymentFlow/initPaymentRouter');
+const checkStatusRouter = require('./routes/paymentFlow/checkStatusRouter');
+const webhookRouter = require('./routes/paymentFlow/webhookRouter');
+
+// Set WebSocket reference in routes
+initPaymentRouter.setPaymentWebSocket(paymentWebSocket);
+checkStatusRouter.setPaymentWebSocket(paymentWebSocket);
+webhookRouter.setPaymentWebSocket(paymentWebSocket);
+
 // Middleware
 // CORS - Allow all origins
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -70,7 +83,6 @@ app.set('views', path.join(__dirname, 'views'));
 // Add this line to use main.ejs as layout
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');  // This tells it to use main.ejs
-
 
 // Middleware to make base URL available in all routes
 app.use((req, res, next) => {
@@ -178,6 +190,11 @@ app.use('/api/virtual-cards/block', blockVirtualCardRouter);
 app.use('/api/virtual-cards/unblock', unblockVirtualCardRouter);
 app.use('/api/virtual-cards/transactions', getVirtualCardTransactionsRouter);
 
+// Payment Flow Routes (Front-End Only)
+app.use('/api/flow/initiate', initPaymentRouter.router);
+app.use('/api/flow/status', checkStatusRouter.router);
+app.use('/api/flow/webhook', webhookRouter.router);
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -226,6 +243,25 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Health check
+app.get('/api/flow/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    activeSessions: paymentWebSocket.getActiveSessions(),
+    services: {
+      mpesa: '/api/flow/initiate/mpesa',
+      card: '/api/flow/initiate/card',
+      bankTransfer: '/api/flow/initiate/bank-transfer',
+      status: '/api/flow/status',
+      webhook: '/api/flow/webhook',
+    },
+  });
+});
+
+// Start status checker (checks pending payments every 30 seconds)
+paymentWebSocket.startStatusChecker(30000);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err.stack);
@@ -243,6 +279,16 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`💳 Payment endpoints available at /api/*`);
   console.log(`📊 Transaction endpoints available at /api/transactions/*`);
   console.log(`💳 Virtual Card endpoints available at /api/virtual-cards/*`);
+
+  console.log(`\n🚀 Payment Flow Server is running!`);
+  console.log(`📡 HTTP server: http://localhost:${PORT}`);
+  console.log(`🔌 WebSocket server: ws://localhost:${PORT}`);
+  console.log(`💰 Payment initiation: POST /api/flow/initiate/mpesa`);
+  console.log(`💰 Card payment: POST /api/flow/initiate/card`);
+  console.log(`💰 Bank transfer: POST /api/flow/initiate/bank-transfer`);
+  console.log(`✅ Payment status: POST /api/flow/status`);
+  console.log(`🔄 Webhook endpoint: POST /api/flow/webhook/flutterwave`);
+  console.log(`❤️ Health check: GET /api/flow/health\n`);
 });
 
 // Handle graceful shutdown
@@ -252,3 +298,5 @@ process.on('SIGTERM', () => {
     console.log('HTTP server closed');
   });
 });
+
+module.exports = { app, server, paymentWebSocket };
