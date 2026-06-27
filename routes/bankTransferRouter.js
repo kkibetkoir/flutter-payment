@@ -11,8 +11,6 @@ router.post('/', async (req, res) => {
       currency,
       client_ip,
       device_fingerprint,
-      narration,
-      is_permanent,
       expires,
     } = req.body;
 
@@ -24,8 +22,6 @@ router.post('/', async (req, res) => {
       currency: currency || 'NGN',
       client_ip: client_ip || '154.123.220.1',
       device_fingerprint: device_fingerprint || '62wd23423rq324323qew1',
-      narration: narration || 'All star college salary for May',
-      is_permanent: is_permanent || false,
       expires: expires || 3600,
     };
 

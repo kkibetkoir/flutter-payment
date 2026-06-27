@@ -164,7 +164,6 @@ router.post('/bank-transfer', async (req, res) => {
       currency,
       client_ip,
       device_fingerprint,
-      narration,
       userId,
     } = req.body;
 
@@ -186,8 +185,6 @@ router.post('/bank-transfer', async (req, res) => {
       currency: currency || 'NGN',
       client_ip: client_ip || '154.123.220.1',
       device_fingerprint: device_fingerprint || '62wd23423rq324323qew1',
-      narration: narration || 'Payment for services',
-      is_permanent: false,
       expires: 3600,
     };
 
